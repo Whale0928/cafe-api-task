@@ -18,3 +18,7 @@ services:
       MYSQL_PASSWORD: cafe-api-db
     ports:
       - "3306:3306"
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+
+
