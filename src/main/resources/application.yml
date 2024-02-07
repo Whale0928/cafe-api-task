@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql:3306/cafe-api-db?useSSL=false&serverTimezone=UTC
+    username: cafe-api-db
+    password: cafe-api-db
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        format_sql: true
+        defer-datasource-initialization: true
