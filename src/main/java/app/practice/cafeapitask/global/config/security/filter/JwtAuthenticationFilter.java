@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j
@@ -55,6 +56,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String[] excludePath = {"/api/auth/register", "/api/auth/login"};
+        String path = request.getRequestURI();
+        return Arrays.asList(excludePath).contains(path);
     }
 
     private static void generateTokenExceptionMessage(HttpServletResponse response, String message) throws IOException {
