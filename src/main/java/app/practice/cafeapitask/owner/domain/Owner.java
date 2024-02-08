@@ -17,7 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "owner", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "phoneNumber")
+        @UniqueConstraint(columnNames = "phone_number")
 })
 public class Owner {
 
