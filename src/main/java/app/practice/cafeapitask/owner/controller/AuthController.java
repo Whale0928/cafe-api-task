@@ -5,6 +5,7 @@ import app.practice.cafeapitask.owner.dto.request.LoginRequest;
 import app.practice.cafeapitask.owner.dto.request.RegisterRequest;
 import app.practice.cafeapitask.owner.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterRequest registerRequest) {
         String token = authService.register(registerRequest);
         return ResponseEntity.ok(GlobalResponse.success(token));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> loginUser(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
         String token = authService.login(loginRequest);
         response.setHeader("Authorization", "Bearer " + token);
         return ResponseEntity.ok(GlobalResponse.success(token));
