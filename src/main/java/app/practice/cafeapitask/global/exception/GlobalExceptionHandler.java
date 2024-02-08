@@ -9,15 +9,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
-
-import static java.time.LocalDateTime.now;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private static final LocalDateTime timestamp = now();
-
     //Valid Exception 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<GlobalResponse<?>> handleValidationException(MethodArgumentNotValidException ex) {

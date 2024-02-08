@@ -1,7 +1,9 @@
 package app.practice.cafeapitask.global.Object;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class GlobalResponse<T> {
     private final int code;
     private final String message;
