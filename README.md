@@ -32,13 +32,21 @@
 
 ----
 
-### How to Run
+### 실행 방법
 
-- **docker 설치 환경이 필요합니다.**
+1. **도커 실행**:
 
-1. docker-compose.yml 파일을 이용하여 MySQL 컨테이너를 실행합니다.
+- 도커가 설치되어 있지 않다면, [도커 설치](https://docs.docker.com/get-docker/)를 참조하여 설치하세요.
+- 도커가 설치되어 있다면, 도커를 실행하세요.
+
+2. **application build**:
+
+```bash
+./gradlew clean build
+```
+
+3. **Start to docker compose**:
 
 ```bash
 docker-compose up
 ```
-
