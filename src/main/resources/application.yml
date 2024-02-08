@@ -18,3 +18,9 @@ spring:
             physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 
+
+jwt:
+  secret-key: in_a_hole_in_the_ground_there_lived_a_hobbit # 땅 속 어느 굴에 한 호빗이 살고 있었다.
+  expire-length: 86400000 # 1 day
+
+
