@@ -1,5 +1,6 @@
 package app.practice.cafeapitask.global.config.security;
 
+import app.practice.cafeapitask.global.config.security.filter.JwtAuthenticationEntryPoint;
 import app.practice.cafeapitask.global.config.security.filter.JwtAuthenticationFilter;
 import app.practice.cafeapitask.global.util.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,8 @@ public class SecurityConfig {
                                 .requestMatchers(POST, "/api/auth/login").permitAll()
                                 .anyRequest().authenticated()
                 )
+                .exceptionHandling(authenticationManager -> authenticationManager
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
