@@ -1,6 +1,5 @@
-package app.practice.cafeapitask.owner.repository;
+package app.practice.cafeapitask.owner.domain;
 
-import app.practice.cafeapitask.owner.domain.Owner;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

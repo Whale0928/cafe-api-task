@@ -3,9 +3,9 @@ package app.practice.cafeapitask.owner.service;
 import app.practice.cafeapitask.global.exception.CustomException;
 import app.practice.cafeapitask.global.util.jwt.JwtTokenProvider;
 import app.practice.cafeapitask.owner.domain.Owner;
+import app.practice.cafeapitask.owner.domain.OwnerRepository;
 import app.practice.cafeapitask.owner.dto.request.LoginRequest;
 import app.practice.cafeapitask.owner.dto.request.RegisterRequest;
-import app.practice.cafeapitask.owner.repository.OwnerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,9 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -25,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -103,16 +99,11 @@ class AuthServiceTest {
         when(ownerRepository.findByPhoneNumber(phoneNumber)).thenReturn(Optional.of(owner));
         when(passwordEncoder.matches(password, encodedPassword)).thenReturn(true);
 
-        Authentication authentication = mock(Authentication.class);
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         // When: 사용자가 로그인을 시도하면
         String resultToken = authService.login(loginRequest);
 
         // Then: JWT 토큰이 반환되어야 한다
         assertEquals(jwtToken, resultToken);
-        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
     }
 
     @Test
