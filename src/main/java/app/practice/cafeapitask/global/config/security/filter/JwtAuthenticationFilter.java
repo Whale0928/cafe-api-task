@@ -79,8 +79,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private Authentication getAuthentication(String token) {
-        String memberEmail = jwtTokenProvider.getPhoneNumberByToken(token);
-        log.info("owner: {}", memberEmail);
-        return new UsernamePasswordAuthenticationToken(memberEmail, null, new ArrayList<>());
+        Long id = jwtTokenProvider.getIdByToken(token);
+        String phoneNumberByToken = jwtTokenProvider.getPhoneNumberByToken(token);
+        log.info("owner id: {} / {}", id, phoneNumberByToken);
+
+        return new UsernamePasswordAuthenticationToken(id, null, new ArrayList<>());
     }
 }

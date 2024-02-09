@@ -28,6 +28,7 @@ public class JwtTokenProvider {
      */
     public String createToken(Owner owner) {
         Claims claims = Jwts.claims()
+                .setIssuer(owner.getId().toString())
                 .setId(owner.getId().toString())
                 .setSubject(owner.getPhoneNumber())
                 .setIssuedAt(new Date())
@@ -37,6 +38,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setClaims(claims)
+                .setId(owner.getId().toString())
                 .setSubject(owner.getPhoneNumber())
                 .setIssuedAt(new Date(systemTime))
                 .setExpiration(new Date(systemTime + expireLength))
@@ -94,7 +96,7 @@ public class JwtTokenProvider {
      * 토큰에서 사용자 정보 추출
      */
     public Long getIdByToken(String token) {
-        return extractClaim(token, claims -> claims.get("id", Long.class));
+        return extractClaim(token, claims -> Long.parseLong(claims.getIssuer()));
     }
 
     /**

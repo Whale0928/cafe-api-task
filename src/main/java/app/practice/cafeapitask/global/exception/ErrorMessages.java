@@ -10,6 +10,7 @@ public enum ErrorMessages {
     //COMMON
     INVALID_INPUT_VALUE("잘못된 입력값입니다."),
     INVALID_DATE_VALUE("잘못된 날짜값입니다."),
+    INVALID_ENUM_VALUE("허용되지 않은 상수타입입니다.."),
 
     //Auth
     ALREADY_EXIST_OWNER("이미 존재하는 사용자입니다."),
