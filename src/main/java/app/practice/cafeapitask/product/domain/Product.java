@@ -1,4 +1,4 @@
-package app.practice.cafeapitask.products.domain;
+package app.practice.cafeapitask.product.domain;
 
 import app.practice.cafeapitask.owner.domain.Owner;
 import jakarta.persistence.Column;

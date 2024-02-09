@@ -1,6 +1,6 @@
 package app.practice.cafeapitask.owner.domain;
 
-import app.practice.cafeapitask.products.domain.Product;
+import app.practice.cafeapitask.product.domain.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
