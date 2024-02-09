@@ -9,12 +9,13 @@ services:
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cafe-api-db?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cafe-api-db?serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: cafe-api-db
       SPRING_DATASOURCE_PASSWORD: cafe-api-db
   mysql:
     platform: linux/x86_64
     image: mysql:5.7
+    hostname: mysql
     environment:
       MYSQL_ROOT_PASSWORD: cafe-api-db
       MYSQL_DATABASE: cafe-api-db

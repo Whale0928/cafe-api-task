@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql:3306/cafe-api-db?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/cafe-api-db
     username: cafe-api-db
     password: cafe-api-db
   jpa:
@@ -12,11 +12,9 @@ spring:
         format_sql: true
         highlight_sql: true
         hbm2ddl:
-          auto: update
           naming:
             physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # 카멜케이스를 언더스코어로 변경
-
-
+        connection:
 
 jwt:
   secret-key: in_a_hole_in_the_ground_there_lived_a_hobbit # 땅 속 어느 굴에 한 호빗이 살고 있었다.
