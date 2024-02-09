@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/products/manage")
+@RequestMapping("/api/product/manage")
 public class ProductManageController {
 
     private final ProductManageService productManageService;
@@ -43,7 +43,7 @@ public class ProductManageController {
      * @return the response entity
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id) {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id ) {
         return ResponseEntity.ok().build();
     }
 

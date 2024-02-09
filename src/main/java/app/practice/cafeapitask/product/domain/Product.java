@@ -68,6 +68,10 @@ public class Product {
     @Column(nullable = false)
     private Size size;
 
+    @Comment("상품 상태")
+    @Enumerated(EnumType.STRING)
+    private ProductStatus productStatus;
+
     @Builder
     private Product(Long id, Owner owner, String category, Double price, Double cost, String name, String description, String barcode, LocalDate expirationDate, Size size) {
         this.id = id;
@@ -80,5 +84,6 @@ public class Product {
         this.barcode = barcode;
         this.expirationDate = expirationDate;
         this.size = size;
+        this.productStatus = ProductStatus.ACTIVE;
     }
 }

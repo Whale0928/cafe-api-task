@@ -18,7 +18,7 @@ public class ProductManageService {
     private final ProductRepository productRepository;
     private final OwnerRepository ownerRepository;
 
-    public static Product ProductOf(Owner owner, ProductCreateRequest request) {
+    private static Product ProductOf(Owner owner, ProductCreateRequest request) {
         return Product.builder()
                 .owner(owner)
                 .category(request.getCategory())
