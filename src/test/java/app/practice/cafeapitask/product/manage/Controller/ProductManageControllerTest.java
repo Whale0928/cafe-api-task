@@ -3,6 +3,7 @@ package app.practice.cafeapitask.product.manage.Controller;
 import app.practice.cafeapitask.global.Object.GlobalResponse;
 import app.practice.cafeapitask.global.exception.GlobalExceptionHandler;
 import app.practice.cafeapitask.product.domain.Size;
+import app.practice.cafeapitask.product.manage.dto.ProductMessage;
 import app.practice.cafeapitask.product.manage.dto.request.ProductCreateRequest;
 import app.practice.cafeapitask.product.manage.dto.response.ProductCreateResponse;
 import app.practice.cafeapitask.product.manage.service.ProductManageService;
@@ -27,6 +28,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,7 +61,7 @@ class ProductManageControllerTest {
 
     @Test
     @DisplayName("상품을 등록할 수 있다.")
-    void test_() throws Exception {
+    void test_create_order() throws Exception {
         Long id = 1L;
 
         // given
@@ -86,4 +88,24 @@ class ProductManageControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("상품을 삭제 수 있다.")
+    void test_delete_order() throws Exception {
+        Long id = 1L;
+
+        // given
+        ProductMessage changeProductStatus = ProductMessage.CHANGE_PRODUCT_STATUS;
+
+        // when
+        when(productManageService.deleteProduct(id)).thenReturn(changeProductStatus);
+
+        // then
+        mockMvc.perform(delete("/api/product/manage/{id}", id)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(id)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
 }
