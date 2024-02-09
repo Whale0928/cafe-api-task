@@ -36,7 +36,7 @@ public class ProductCreateRequest {
     @NotNull(message = "유통기한은 null일 수 없습니다.")
     private final LocalDate expirationDate;
 
-    @NotBlank(message = "사이즈는 필수입니다.")
+    @NotNull(message = "사이즈는 필수입니다.")
     private final Size size;
 
     @Builder
