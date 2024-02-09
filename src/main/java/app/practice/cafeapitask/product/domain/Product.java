@@ -1,6 +1,7 @@
 package app.practice.cafeapitask.product.domain;
 
 import app.practice.cafeapitask.owner.domain.Owner;
+import app.practice.cafeapitask.product.manage.dto.ProductMessage;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,6 +20,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
+
+import static app.practice.cafeapitask.product.manage.dto.ProductMessage.ALREADY_CHANGED_PRODUCT_STATUS;
+import static app.practice.cafeapitask.product.manage.dto.ProductMessage.CHANGE_PRODUCT_STATUS;
 
 @Getter
 @Entity
@@ -85,5 +89,13 @@ public class Product {
         this.expirationDate = expirationDate;
         this.size = size;
         this.productStatus = ProductStatus.ACTIVE;
+    }
+
+    public ProductMessage updateProductStatus(ProductStatus productStatus) {
+        if (this.productStatus.equals(ProductStatus.INACTIVE)) {
+            return ALREADY_CHANGED_PRODUCT_STATUS;
+        }
+        this.productStatus = productStatus;
+        return CHANGE_PRODUCT_STATUS;
     }
 }

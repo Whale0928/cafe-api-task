@@ -43,7 +43,7 @@ public class ProductManageController {
      * @return the response entity
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id ) {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id) {
         return ResponseEntity.ok().build();
     }
 
@@ -56,6 +56,7 @@ public class ProductManageController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(GlobalResponse.success(
+                productManageService.deleteProduct(id)));
     }
 }
