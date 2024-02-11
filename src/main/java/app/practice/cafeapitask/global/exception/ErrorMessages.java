@@ -20,7 +20,9 @@ public enum ErrorMessages {
 
     //Product
     NOT_FOUND_PRODUCT("상품을 찾을 수 없습니다."),
-    NOT_FOUND_PRODUCT_OPTION("상품 옵션을 찾을 수 없습니다.")
+    NOT_FOUND_PRODUCT_OPTION("상품 옵션을 찾을 수 없습니다."),
+    NOT_MATCH_PRODUCT_OPTION("상품 옵션을 찾을 수 없습니다."),
+    NOT_ALLOWED_PRODUCT_UPDATE("상품 수정 권한이 없습니다."),
     ;
 
     private final String message;

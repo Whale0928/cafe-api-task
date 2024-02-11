@@ -2,6 +2,7 @@ package app.practice.cafeapitask.product.domain;
 
 import app.practice.cafeapitask.owner.domain.Owner;
 import app.practice.cafeapitask.product.manage.dto.ProductMessage;
+import app.practice.cafeapitask.product.manage.dto.request.ProductUpdateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -98,4 +99,19 @@ public class Product {
         this.productStatus = productStatus;
         return CHANGE_PRODUCT_STATUS;
     }
+
+
+    public ProductMessage updateProduct(ProductUpdateRequest request) {
+        this.category = request.getCategory();
+        this.price = request.getPrice();
+        this.cost = request.getCost();
+        this.name = request.getName();
+        this.description = request.getDescription();
+        this.barcode = request.getBarcode();
+        this.expirationDate = request.getExpirationDate();
+        this.size = request.getSize();
+        return ProductMessage.SUCCESS_UPDATE_PRODUCT;
+    }
+
 }
+

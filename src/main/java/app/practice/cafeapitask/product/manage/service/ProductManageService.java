@@ -7,11 +7,13 @@ import app.practice.cafeapitask.product.domain.Product;
 import app.practice.cafeapitask.product.domain.ProductRepository;
 import app.practice.cafeapitask.product.manage.dto.ProductMessage;
 import app.practice.cafeapitask.product.manage.dto.request.ProductCreateRequest;
+import app.practice.cafeapitask.product.manage.dto.request.ProductUpdateRequest;
 import app.practice.cafeapitask.product.manage.dto.response.ProductCreateResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static app.practice.cafeapitask.global.exception.ErrorMessages.NOT_ALLOWED_PRODUCT_UPDATE;
 import static app.practice.cafeapitask.global.exception.ErrorMessages.NOT_FOUND_OWNER;
 import static app.practice.cafeapitask.global.exception.ErrorMessages.NOT_FOUND_PRODUCT;
 import static app.practice.cafeapitask.product.domain.ProductStatus.INACTIVE;
@@ -44,8 +46,18 @@ public class ProductManageService {
         return ProductCreateResponse.of(product.getId());
     }
 
-    public String updateProduct(Long id) {
-        return null;
+    @Transactional
+    public ProductMessage updateProduct(Long id, Long ownerId, ProductUpdateRequest request) {
+        Owner owner = ownerRepository.findById(ownerId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_OWNER));
+
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_PRODUCT));
+
+        if (!owner.getId().equals(product.getId()))
+            throw new CustomException(NOT_ALLOWED_PRODUCT_UPDATE);
+
+        return product.updateProduct(request);
     }
 
     @Transactional
@@ -54,4 +66,6 @@ public class ProductManageService {
                 .orElseThrow(() -> new CustomException(NOT_FOUND_PRODUCT));
         return product.updateProductStatus(INACTIVE);
     }
+
+
 }

@@ -3,6 +3,7 @@ package app.practice.cafeapitask.product.manage.Controller;
 
 import app.practice.cafeapitask.global.Object.GlobalResponse;
 import app.practice.cafeapitask.product.manage.dto.request.ProductCreateRequest;
+import app.practice.cafeapitask.product.manage.dto.request.ProductUpdateRequest;
 import app.practice.cafeapitask.product.manage.service.ProductManageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,10 +44,13 @@ public class ProductManageController {
      * @return the response entity
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id) {
-        return ResponseEntity.ok().build();
-    }
+    public ResponseEntity<?> updateProduct(@PathVariable Long id
+            , @RequestBody @Valid ProductUpdateRequest request) {
+        Long ownerId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        return ResponseEntity
+                .ok(GlobalResponse.success(productManageService.updateProduct(id, ownerId, request)));
+    }
 
     /**
      * 상품 삭제 API
@@ -56,7 +60,7 @@ public class ProductManageController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
-        return ResponseEntity.ok(GlobalResponse.success(
-                productManageService.deleteProduct(id)));
+        return ResponseEntity
+                .ok(GlobalResponse.success(productManageService.deleteProduct(id)));
     }
 }
