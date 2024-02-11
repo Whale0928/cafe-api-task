@@ -9,6 +9,7 @@ import app.practice.cafeapitask.product.domain.ProductStatus;
 import app.practice.cafeapitask.product.domain.Size;
 import app.practice.cafeapitask.product.manage.dto.ProductMessage;
 import app.practice.cafeapitask.product.manage.dto.request.ProductCreateRequest;
+import app.practice.cafeapitask.product.manage.dto.request.ProductUpdateRequest;
 import app.practice.cafeapitask.product.manage.dto.response.ProductCreateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,8 +42,10 @@ class ProductManageServiceTest {
     private ProductRepository productRepository;
     @Mock
     private OwnerRepository ownerRepository;
-    private ProductCreateRequest request;
+
     private Product product;
+    private ProductCreateRequest request;
+    private ProductUpdateRequest updateRequest;
 
     @BeforeEach
     void setUp() {
@@ -59,6 +62,17 @@ class ProductManageServiceTest {
 
         product = Product.builder()
                 .id(productId)
+                .category("음료")
+                .name("아메리카노")
+                .price(3000.0)
+                .cost(1000.0)
+                .description("시원하고 맛있는 아메리카노")
+                .barcode("lllliili11l1")
+                .expirationDate(LocalDate.now().plusDays(7))
+                .size(Size.LARGE)
+                .build();
+
+        updateRequest = ProductUpdateRequest.builder()
                 .category("음료")
                 .name("아메리카노")
                 .price(3000.0)
@@ -96,6 +110,41 @@ class ProductManageServiceTest {
         when(ownerRepository.findById(ownerId)).thenReturn(Optional.empty());
         // When & Then
         assertThrows(CustomException.class, () -> productManageService.createProduct(ownerId, request));
+    }
+
+    @Test
+    @DisplayName("상품 수정 성공 시 ProductMessage 반환한다.")
+    void whenUpdateProduct_thenReturnProductMessage() {
+        // Given
+        ProductMessage successUpdateProduct = ProductMessage.SUCCESS_UPDATE_PRODUCT;
+
+
+        // When
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        when(ownerRepository.findById(ownerId)).thenReturn(Optional.of(Owner.builder().id(ownerId).build()));
+
+        // Then
+        ProductMessage result = productManageService.updateProduct(productId, ownerId, updateRequest);
+        assertEquals(successUpdateProduct, result);
+    }
+
+    @Test
+    @DisplayName("Owner가 존재하지 않을 때 CustomException 발생")
+    void whenOwnerNotFound_thenThrowCustomException_2() {
+        // Given
+        when(ownerRepository.findById(ownerId)).thenReturn(Optional.empty());
+        // When & Then
+        assertThrows(CustomException.class, () -> productManageService.updateProduct(productId, ownerId, updateRequest));
+    }
+
+    @Test
+    @DisplayName("상품이 없을 경우 CustomException 발생")
+    void whenProductNotFound_thenThrowCustomException_2() {
+        // Given
+        when(ownerRepository.findById(ownerId)).thenReturn(Optional.of(Owner.builder().id(ownerId).build()));
+        when(productRepository.findById(productId)).thenReturn(Optional.empty());
+        // When & Then
+        assertThrows(CustomException.class, () -> productManageService.updateProduct(productId, ownerId, updateRequest));
     }
 
     @Test
