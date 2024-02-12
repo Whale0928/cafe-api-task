@@ -5,6 +5,7 @@ import app.practice.cafeapitask.owner.domain.Owner;
 import app.practice.cafeapitask.owner.domain.OwnerRepository;
 import app.practice.cafeapitask.product.domain.Product;
 import app.practice.cafeapitask.product.domain.ProductRepository;
+import app.practice.cafeapitask.product.query.dto.reponse.ProductDetailResponse;
 import app.practice.cafeapitask.product.query.dto.reponse.ProductListResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -156,5 +157,43 @@ class ProductQueryServiceTest {
             assertEquals(productListResponse.get(i).getDescription(), result.get(i).getDescription());
             assertEquals(productListResponse.get(i).getProductStatus(), result.get(i).getProductStatus());
         }
+    }
+
+    @Test
+    @DisplayName("제품 ID를 기반으로 제품의 상세 정보를 조회할 수 있다.")
+    void test_getProductById() {
+        // given
+        Long productId = 1L;
+        Product product = Product.builder()
+                .id(productId)
+                .owner(owner)
+                .name("name_0")
+                .price(1000.0)
+                .cost(500.0)
+                .barcode("barcode_0")
+                .category("category_0")
+                .description("description_0")
+                .build();
+
+        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+        // when
+        ProductDetailResponse response = productQueryService.getProductDetailById(productId);
+
+        // then
+        assertEquals(product.getId(), response.getId());
+        assertEquals(product.getName(), response.getName());
+    }
+
+    @Test
+    @DisplayName("제품 ID를 기반으로 제품의 상세 정보를 조회할 때, 제품이 존재하지 않으면 CustomException 발생")
+    void test_getProductById_productNotFound() {
+        // given
+        Long nonExistentProductId = 999L;
+
+        when(productRepository.findById(nonExistentProductId)).thenReturn(Optional.empty());
+
+        // when & then
+        assertThrows(CustomException.class, () -> productQueryService.getProductDetailById(nonExistentProductId));
     }
 }

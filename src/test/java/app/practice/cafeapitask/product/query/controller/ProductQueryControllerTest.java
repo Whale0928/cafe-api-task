@@ -1,6 +1,7 @@
 package app.practice.cafeapitask.product.query.controller;
 
 import app.practice.cafeapitask.global.exception.GlobalExceptionHandler;
+import app.practice.cafeapitask.product.query.dto.reponse.ProductDetailResponse;
 import app.practice.cafeapitask.product.query.dto.reponse.ProductListResponse;
 import app.practice.cafeapitask.product.query.service.ProductQueryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -93,4 +94,22 @@ class ProductQueryControllerTest {
 
     }
 
+    @Test
+    @DisplayName("제품 ID를 기반으로 제품의 상세 정보를 조회 할 수 있는 API")
+    void getProductDetailById() throws Exception {
+        // given
+        Long id = 1L;
+        ProductDetailResponse response = ProductDetailResponse.builder()
+                .id(1L)
+                .name("아메리카노")
+                .category("음료")
+                .description("커피")
+                .productStatus(INACTIVE)
+                .build();
+        // when
+        when(queryService.getProductDetailById(id)).thenReturn(response);
+        // then
+        mockMvc.perform(get("/api/product/query/{id}", id))
+                .andExpect(status().isOk());
+    }
 }

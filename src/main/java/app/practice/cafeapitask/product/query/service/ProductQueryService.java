@@ -35,7 +35,7 @@ public class ProductQueryService {
     }
 
     @Transactional
-    public Object getProductDetailById(Long id) {
+    public ProductDetailResponse getProductDetailById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorMessages.NOT_FOUND_PRODUCT));
         Owner owner = product.getOwner();
