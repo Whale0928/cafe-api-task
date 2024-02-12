@@ -25,6 +25,7 @@ public class ProductQueryController {
 
     /**
      * 모든 제품 목록 조회 API
+     *
      * @param pageable the pageable
      * @return the all products
      */
@@ -36,7 +37,7 @@ public class ProductQueryController {
     }
 
     /**
-     * todo 제품 ID를 기반으로 제품의 상세 정보를 조회하는 기능을 구현해야 합니다.
+     * 제품 ID를 기반으로 제품의 상세 정보를 조회하는 기능.
      *
      * @param id the id
      * @return the product by id
@@ -47,18 +48,16 @@ public class ProductQueryController {
     }
 
     /**
-     * todo 제품 이름으로 검색 API
-     * 제품 이름을 포함하는 검색 기능을 구현해야 한다. 이름으로 제품을 검색할 때는 페이징을 적용해야 합니다.
+     * 제품 이름을 포함하는 검색 기능
      *
-     * @param name the name
-     * @param page the page
-     * @param size the size
+     * @param name     the name
+     * @param pageable the pageable
      * @return the response entity
      */
     @GetMapping("/search")
     public ResponseEntity<?> searchProductsByName(@RequestParam String name,
-                                                  @RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok().build();
+                                                  @PageableDefault(size = 15, sort = "id", direction = DESC) Pageable pageable) {
+        Long ownerId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(GlobalResponse.success(queryService.searchProductsByName(ownerId, name, pageable)));
     }
 }

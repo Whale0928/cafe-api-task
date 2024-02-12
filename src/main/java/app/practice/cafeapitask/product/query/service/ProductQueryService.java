@@ -8,12 +8,14 @@ import app.practice.cafeapitask.product.domain.Product;
 import app.practice.cafeapitask.product.domain.ProductRepository;
 import app.practice.cafeapitask.product.query.dto.reponse.ProductDetailResponse;
 import app.practice.cafeapitask.product.query.dto.reponse.ProductListResponse;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static app.practice.cafeapitask.global.util.sound.InitialSound.isAlreadyInitialSound;
+import static app.practice.cafeapitask.global.util.sound.InitialSound.matchInitialSound;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,6 @@ public class ProductQueryService {
                         .build()).toList();
     }
 
-    @Transactional
     public ProductDetailResponse getProductDetailById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorMessages.NOT_FOUND_PRODUCT));
@@ -54,5 +55,29 @@ public class ProductQueryService {
                 .ownerId(owner.getId())
                 .ownerPhoneNumber(owner.getPhoneNumber())
                 .build();
+    }
+
+    public List<ProductListResponse> searchProductsByName(Long ownerId, String name, Pageable pageable) {
+        List<Product> products;
+
+        if (isAlreadyInitialSound(name)) {
+            products = productRepository.findAllLikeName(name, pageable);
+        } else {
+            List<Product> paginatedProducts = productRepository.findAllByOwnerId(ownerId)
+                    .stream()
+                    .filter(product -> matchInitialSound(product.getName(), name))
+                    .toList();
+            int start = pageable.getPageNumber() * pageable.getPageSize();
+            int end = Math.min((start + pageable.getPageSize()), paginatedProducts.size());
+            products = paginatedProducts.subList(start, end);
+        }
+        return products.stream()
+                .map(product -> ProductListResponse.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .category(product.getCategory())
+                        .description(product.getDescription())
+                        .productStatus(product.getProductStatus())
+                        .build()).toList();
     }
 }

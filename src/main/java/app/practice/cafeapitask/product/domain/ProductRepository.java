@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByOwnerId(Long ownerId, Pageable pageable);
+
+    List<Product> findAllByOwnerId(Long ownerId);
+
+    List<Product> findAllLikeName(String name, Pageable pageable);
 }
