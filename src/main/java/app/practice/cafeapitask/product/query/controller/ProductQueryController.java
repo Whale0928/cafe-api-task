@@ -1,30 +1,40 @@
 package app.practice.cafeapitask.product.query.controller;
 
+import app.practice.cafeapitask.global.Object.GlobalResponse;
+import app.practice.cafeapitask.product.query.service.ProductQueryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.data.domain.Sort.Direction.DESC;
+
 @RestController
 @RequestMapping("/api/product/query")
 @RequiredArgsConstructor
 public class ProductQueryController {
 
+    private final ProductQueryService queryService;
+
+
     /**
      * 모든 제품 목록 조회 API
      * todo 페이지네이션을 적용하여 모든 제품의 목록을 조회하는 기능을 구현해야 합니다.
      *
-     * @param page the page
-     * @param size the size
+     * @param pageable the pageable
      * @return the all products
      */
     @GetMapping
-    public ResponseEntity<?> getAllProducts(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> getAllProducts(@PageableDefault(size = 15, sort = "id", direction = DESC) Pageable pageable) {
+        Long ownerId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity
+                .ok(GlobalResponse.success(queryService.getAllProducts(ownerId, pageable)));
     }
 
     /**
