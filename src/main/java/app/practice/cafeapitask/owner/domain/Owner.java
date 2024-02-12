@@ -17,6 +17,7 @@ import org.hibernate.annotations.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
@@ -39,8 +40,8 @@ public class Owner {
     @Column(nullable = false, name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "owner")
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "owner", fetch = LAZY)
+    private final List<Product> products = new ArrayList<>();
 
     @Builder
     private Owner(Long id, String phoneNumber, String password) {

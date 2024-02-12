@@ -25,8 +25,6 @@ public class ProductQueryController {
 
     /**
      * 모든 제품 목록 조회 API
-     * todo 페이지네이션을 적용하여 모든 제품의 목록을 조회하는 기능을 구현해야 합니다.
-     *
      * @param pageable the pageable
      * @return the all products
      */
@@ -44,8 +42,8 @@ public class ProductQueryController {
      * @return the product by id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> getProductDetailById(@PathVariable Long id) {
+        return ResponseEntity.ok(GlobalResponse.success(queryService.getProductDetailById(id)));
     }
 
     /**
