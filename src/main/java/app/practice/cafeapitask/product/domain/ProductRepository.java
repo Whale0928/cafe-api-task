@@ -10,5 +10,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findAllByOwnerId(Long ownerId);
 
-    List<Product> findAllLikeName(String name, Pageable pageable);
+    List<Product> findAllByOwnerIdAndNameContaining(Long ownerId, String name, Pageable pageable);
 }

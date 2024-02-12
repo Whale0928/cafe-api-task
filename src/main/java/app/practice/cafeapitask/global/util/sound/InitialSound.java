@@ -17,6 +17,8 @@ public class InitialSound {
      * @return the boolean
      */
     public static boolean isAlreadyInitialSound(String input) {
+        if (input == null)
+            return false;
         //한글 초성의 범위 0x3131(ㄱ) ~ 0x314E(ㅎ)
         return input.chars().allMatch(c -> c >= 0x3131 && c <= 0x314E);
     }
@@ -28,6 +30,9 @@ public class InitialSound {
      * @return the initial sound
      */
     public static String getInitialSound(String word) {
+        if (word == null)
+            return "";
+
         log.info("초성으로 변환합니다 : {}", word);
         return Arrays.stream(word.split("")).map(x -> {
             char cho = (char) ((x.charAt(0) - 0xAC00) / 28 / 21);
@@ -43,6 +48,9 @@ public class InitialSound {
      * @return the boolean
      */
     public static boolean matchInitialSound(String name, String target) {
+        if (name == null || target == null)
+            return false;
+
         if (isAlreadyInitialSound(target)) {
             log.info("문자열로 비교합니다 : {}({}) {}({})", getInitialSound(name), name, target, getInitialSound(target));
             String initialSound = getInitialSound(name);

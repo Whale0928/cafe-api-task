@@ -61,8 +61,6 @@ public class ProductQueryService {
         List<Product> products;
 
         if (isAlreadyInitialSound(name)) {
-            products = productRepository.findAllLikeName(name, pageable);
-        } else {
             List<Product> paginatedProducts = productRepository.findAllByOwnerId(ownerId)
                     .stream()
                     .filter(product -> matchInitialSound(product.getName(), name))
@@ -70,7 +68,10 @@ public class ProductQueryService {
             int start = pageable.getPageNumber() * pageable.getPageSize();
             int end = Math.min((start + pageable.getPageSize()), paginatedProducts.size());
             products = paginatedProducts.subList(start, end);
+        } else {
+            products = productRepository.findAllByOwnerIdAndNameContaining(ownerId, name, pageable);
         }
+
         return products.stream()
                 .map(product -> ProductListResponse.builder()
                         .id(product.getId())
