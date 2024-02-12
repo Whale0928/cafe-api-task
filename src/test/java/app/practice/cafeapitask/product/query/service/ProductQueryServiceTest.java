@@ -1,6 +1,7 @@
 package app.practice.cafeapitask.product.query.service;
 
 import app.practice.cafeapitask.global.exception.CustomException;
+import app.practice.cafeapitask.global.util.sound.InitialSound;
 import app.practice.cafeapitask.owner.domain.Owner;
 import app.practice.cafeapitask.owner.domain.OwnerRepository;
 import app.practice.cafeapitask.product.domain.Product;
@@ -15,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,4 +198,99 @@ class ProductQueryServiceTest {
         // when & then
         assertThrows(CustomException.class, () -> productQueryService.getProductDetailById(nonExistentProductId));
     }
+
+    @Test
+    @DisplayName("이름을 기반으로 제품을 검색할 수 있다.")
+    void searchProductsByName_exactName() {
+        // given
+        Long ownerId = 1L;
+        String searchName = "크림";
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Product product1 = Product.builder().id(1L).owner(owner).name(searchName).build();
+        Product product2 = Product.builder().id(2L).owner(owner).name(searchName).build();
+        List<Product> products = List.of(product1, product2);
+
+        // when
+        when(productRepository.findAllByOwnerIdAndNameContaining(ownerId, searchName, pageable)).thenReturn(products);
+        List<ProductListResponse> list = productQueryService.searchProductsByName(ownerId, searchName, pageable);
+
+        // then
+        assertEquals(products.size(), list.size());
+    }
+
+    @Test
+    @DisplayName("이름을 기반으로 제품을 검색할 때, 초성이 포함된 제품을 반환한다.")
+    void searchProductsByName_containName() {
+        // given
+        Long ownerId = 1L;
+        String searchName = "ㅋㄹ";
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Product product1 = Product.builder().id(1L).owner(owner).name("크림").build();
+        Product product2 = Product.builder().id(2L).owner(owner).name("크림").build();
+        List<Product> products = List.of(product1, product2);
+
+        // when
+        when(productRepository.findAllByOwnerId(ownerId)).thenReturn(products);
+        List<ProductListResponse> list = productQueryService.searchProductsByName(ownerId, searchName, pageable);
+
+        // then
+        assertEquals(products.size(), list.size());
+
+        for (ProductListResponse product : list) {
+            assertTrue(InitialSound.matchInitialSound(product.getName(), searchName));
+        }
+    }
+
+    @Test
+    @DisplayName("제품 이름이 null인 경우, 빈 리스트를 반환한다.")
+    void searchProductsByName_nullName() {
+        // given
+        Long ownerId = 1L;
+        String searchName = null;
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // when
+        List<ProductListResponse> list = productQueryService.searchProductsByName(ownerId, searchName, pageable);
+
+        // then
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
+    @DisplayName("제품 이름이 빈 문자열인 경우, 빈 리스트를 반환한다.")
+    void searchProductsByName_emptyName() {
+        // given
+        Long ownerId = 1L;
+        String searchName = "";
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // when
+        List<ProductListResponse> list = productQueryService.searchProductsByName(ownerId, searchName, pageable);
+
+        // then
+        assertTrue(list.isEmpty());
+    }
+
+    @Test
+    @DisplayName("제품 이름이 초성이 아닌 문자열인 경우, 해당 문자열을 포함하는 제품을 반환한다.")
+    void searchProductsByName_nonInitialSoundName() {
+        // given
+        Long ownerId = 1L;
+        String searchName = "크림";
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Product product1 = Product.builder().id(1L).owner(owner).name("크림").build();
+        Product product2 = Product.builder().id(2L).owner(owner).name("크림").build();
+        List<Product> products = List.of(product1, product2);
+
+        // when
+        when(productRepository.findAllByOwnerIdAndNameContaining(ownerId, searchName, pageable)).thenReturn(products);
+        List<ProductListResponse> list = productQueryService.searchProductsByName(ownerId, searchName, pageable);
+
+        // then
+        assertEquals(products.size(), list.size());
+    }
+
 }
