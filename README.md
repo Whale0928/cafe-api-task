@@ -52,7 +52,7 @@
 docker-compose up
 ```
 
-4**Http Client 를 활용한 API 테스트**
+4. **Http Client 를 활용한 API 테스트**
 > Http Client는 API를 테스트하고 검증하기 위한 도구로, 인텔리제이 IDE에 내장된 기능입니다.<br>
 > API 요청을 보내고 응답을 확인할 수 있으며, GUI 환경에서 쉽게 사용할 수 있습니다.<br>
 > /http-client/ 경로에 있는 파일들을 Http Client에서 열어 API 검증 및 테스트를 진행합니다.
