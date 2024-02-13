@@ -44,11 +44,14 @@ class ProductManageServiceTest {
     private OwnerRepository ownerRepository;
 
     private Product product;
+    private Owner owner;
     private ProductCreateRequest request;
     private ProductUpdateRequest updateRequest;
 
     @BeforeEach
     void setUp() {
+        owner = Owner.builder().id(ownerId).build();
+
         request = ProductCreateRequest.builder()
                 .category("음료")
                 .name("아메리카노")
@@ -70,6 +73,7 @@ class ProductManageServiceTest {
                 .barcode("lllliili11l1")
                 .expirationDate(LocalDate.now().plusDays(7))
                 .size(Size.LARGE)
+                .owner(owner)
                 .build();
 
         updateRequest = ProductUpdateRequest.builder()
@@ -88,12 +92,13 @@ class ProductManageServiceTest {
     @DisplayName("상품 생성 성공 시 ProductCreateResponse 반환한다.")
     void whenCreateProduct_thenReturnProductCreateResponse() {
         // Given
+        
         // When
         when(ownerRepository.findById(ownerId))
-                .thenReturn(Optional.of(Owner.builder().id(ownerId).build()));
+                .thenReturn(Optional.of(owner));
 
         when(productRepository.saveAndFlush(any()))
-                .thenReturn(Product.builder().id(productId).build()); // 상품 ID 설정을 위한 간단한 구현
+                .thenReturn(Product.builder().id(productId).owner(owner).build()); // 상품 ID 설정을 위한 간단한 구현
 
         ProductCreateResponse response = productManageService.createProduct(ownerId, request);
 
@@ -117,12 +122,9 @@ class ProductManageServiceTest {
     void whenUpdateProduct_thenReturnProductMessage() {
         // Given
         ProductMessage successUpdateProduct = ProductMessage.SUCCESS_UPDATE_PRODUCT;
-
-
         // When
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
-        when(ownerRepository.findById(ownerId)).thenReturn(Optional.of(Owner.builder().id(ownerId).build()));
-
+        when(ownerRepository.findById(ownerId)).thenReturn(Optional.of(owner));
         // Then
         ProductMessage result = productManageService.updateProduct(productId, ownerId, updateRequest);
         assertEquals(successUpdateProduct, result);

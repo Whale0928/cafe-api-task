@@ -54,7 +54,7 @@ public class ProductManageService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_PRODUCT));
 
-        if (!owner.getId().equals(product.getId()))
+        if (!owner.getId().equals(product.getOwner().getId()))
             throw new CustomException(NOT_ALLOWED_PRODUCT_UPDATE);
 
         return product.updateProduct(request);

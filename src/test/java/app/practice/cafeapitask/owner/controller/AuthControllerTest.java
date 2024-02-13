@@ -44,11 +44,11 @@ public class AuthControllerTest {
                 .build();
 
         registerRequest = RegisterRequest.builder()
-                .phoneNumber("testUser")
+                .phoneNumber("01012341234")
                 .password("password")
                 .build();
         loginRequest = LoginRequest.builder()
-                .phoneNumber("testUser")
+                .phoneNumber("01012341235")
                 .password("password")
                 .build();
     }
